@@ -3,6 +3,13 @@
   require_once('class/Labyrinthe.php');
   $test = new Labyrinthe("labyrinthe.txt");
   $test->showContent();
+  $autretess = $test->foundStartEnd();
+  //var_dump($autretess);
+  setcookie("start_x", $autretess[0]["x"], time() + 365*24*3600);
+  setcookie("start_y", $autretess[0]["y"], time() + 365*24*3600);
+  setcookie("end_x", $autretess[1]["x"], time() + 365*24*3600);
+  setcookie("end_y", $autretess[1]["y"], time() + 365*24*3600);
+  var_dump($_COOKIE);
 ?>
 
 <html>
@@ -18,7 +25,7 @@
         <input type="button" value="Up" name="goUp">
         <input type="button" value="Down" name="goDown">
       </form>
-      
+
       <form>
         <input type="button" value="Reload" name="reload">
       </form>
@@ -31,7 +38,8 @@
   </body>
 </html>
 
-
+<!-- ne pas mettre la position du start end dans les cookies, les garder dans la variable et mettre la position du joueur dans les cookies
+a sovoir que la position du joueur au début dépendra du start -->
 
 
 
