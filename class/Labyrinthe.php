@@ -19,6 +19,13 @@
         $test[$key] = explode(" ", $value);
       }
 
+      foreach ($test as $key => $value) {
+        foreach ($test[$key] as $keys => $values) {
+          echo($values . " ");
+        }
+        echo("<br>");
+      }
+
       //var_dump($test);
 
       //$myFileOpen = fopen("" . $this->path_txt_file . "", 'r+');
