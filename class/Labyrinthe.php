@@ -45,5 +45,25 @@
       //var_dump(file("" . $this->path_txt_file . ""));
 
     }
+
+    public function foundStartEnd(){
+      $start = ["x" => 0, "y" => 0];
+      $end = ["x" => 0, "y" => 0];
+
+      foreach ($this->test as $key => $value) {
+        foreach ($this->test[$key] as $keys => $values) {
+          if($values == "S"){
+            $start["x"] = $keys;
+            $start["y"] = $key;
+          }
+          elseif ($values == "E") {
+            $end["x"] = $keys;
+            $end["y"] = $key;
+          }
+        }
+      }
+
+      return [$start, $end];
+    }
   }
 ?>
