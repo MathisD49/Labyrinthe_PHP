@@ -5,6 +5,36 @@
   $test->showContent();
 ?>
 
+<html>
+  <head>
+    <title>Labyrinthe</title>
+    <meta charset="utf-8">
+  </head>
+  <body>
+    <div>
+      <form>
+        <input type="button" value="Right" name="goRight">
+        <input type="button" value="Left" name="goLeft">
+        <input type="button" value="Up" name="goUp">
+        <input type="button" value="Down" name="goDown">
+      </form>
+      
+      <form>
+        <input type="button" value="Reload" name="reload">
+      </form>
+
+      <form>
+        <input type="text" placeholder="nickname" name="nickname">
+        <input type="button" value="Rename" name="rename">
+      </form>
+    </div>
+  </body>
+</html>
+
+
+
+
+
 <!-- pour aller gauche droite etc etc utiliser la methode GET -->
 
 <!-- pour le déplacement, enregistrer dans les cookies/session la positon du joueur -->
