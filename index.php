@@ -2,14 +2,47 @@
   // ceci permet de creer mon objet et de lancer ma méthode
   require_once('class/Labyrinthe.php');
   $test = new Labyrinthe("labyrinthe.txt");
-  $test->showContent();
+
+  if(isset($_COOKIE["joueur_x"]) && isset($_COOKIE["joueur_y"])){
+    $test->spawnPlayer($_COOKIE["joueur_x"]*2, $_COOKIE["joueur_y"]);
+  }
+
   $autretess = $test->foundStartEnd();
-  //var_dump($autretess);
-  setcookie("start_x", $autretess[0]["x"], time() + 365*24*3600);
-  setcookie("start_y", $autretess[0]["y"], time() + 365*24*3600);
-  setcookie("end_x", $autretess[1]["x"], time() + 365*24*3600);
-  setcookie("end_y", $autretess[1]["y"], time() + 365*24*3600);
-  var_dump($_COOKIE);
+
+  // si la position du joueur n'est pas mise ou si il décide de reload, on met à la position du start
+  if(!isset($_COOKIE["joueur_x"]) && !isset($_COOKIE["joueur_y"]) || isset($_POST["reload"])){
+    setcookie("joueur_x", $autretess[0]["x"], time() + 365*24*3600);
+    setcookie("joueur_y", $autretess[0]["y"], time() + 365*24*3600);
+    header("Refresh:0; url=index.php");
+  }
+
+  if(isset($_GET["goRight"])){
+    if($_COOKIE["joueur_x"]+1 <= 14){
+      setcookie("joueur_x", $_COOKIE["joueur_x"]+1, time() + 365*24*3600);
+      header("Refresh:0; url=index.php");
+    }
+  }
+
+  if(isset($_GET["goLeft"])){
+    if($_COOKIE["joueur_x"]-1 >= 0){
+      setcookie("joueur_x", $_COOKIE["joueur_x"]-1, time() + 365*24*3600);
+      header("Refresh:0; url=index.php");
+    }
+  }
+
+  if(isset($_GET["goUp"])){
+    if($_COOKIE["joueur_y"]-1 >= 0){
+      setcookie("joueur_y", $_COOKIE["joueur_y"]-1, time() + 365*24*3600);
+      header("Refresh:0; url=index.php");
+    }
+  }
+
+  if(isset($_GET["goDown"])){
+    if($_COOKIE["joueur_y"]+1 <= 14){
+      setcookie("joueur_y", $_COOKIE["joueur_y"]+1, time() + 365*24*3600);
+      header("Refresh:0; url=index.php");
+    }
+  }
 ?>
 
 <html>
@@ -19,20 +52,20 @@
   </head>
   <body>
     <div>
-      <form>
-        <input type="button" value="Right" name="goRight">
-        <input type="button" value="Left" name="goLeft">
-        <input type="button" value="Up" name="goUp">
-        <input type="button" value="Down" name="goDown">
+      <form action="" method="GET">
+        <input type="submit" value="Right" name="goRight">
+        <input type="submit" value="Left" name="goLeft">
+        <input type="submit" value="Up" name="goUp">
+        <input type="submit" value="Down" name="goDown">
       </form>
 
-      <form>
-        <input type="button" value="Reload" name="reload">
+      <form action="" method="POST">
+        <input type="submit" value="Reload" name="reload">
       </form>
 
-      <form>
+      <form action="" method="POST">
         <input type="text" placeholder="nickname" name="nickname">
-        <input type="button" value="Rename" name="rename">
+        <input type="submit" value="Rename" name="rename">
       </form>
     </div>
   </body>
@@ -57,3 +90,14 @@ a sovoir que la position du joueur au début dépendra du start -->
 <!-- afficher le labyrinthe depuis ce tableau -->
 <!-- effectuer tous les changement de direction et de vérification à partir du tableau -->
 <!-- pour afficher le tableau sur la page, faire une double boucle et mettre des <br> à la fin de chaque boucle -->
+
+
+<!-- TODO :
+au clique sur les boutons (gauche droite haut bas) renvoie vers une url ex: ?x=1 OU ?y=-1
+ensuite faire les tests pour savoir si il peut se déplacer
+si oui le déplacer et mettre dans les nouveaux cookies
+sinon ne rien faire -->
+
+
+<!-- TODO :
+revoir le reload (clear $_GET) -->

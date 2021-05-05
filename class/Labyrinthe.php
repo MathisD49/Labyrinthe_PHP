@@ -3,19 +3,18 @@
 
     // attributs
     public $path_txt_file;
-    public $test;
+    public $test; // tableau avec les cases du jeu
 
     // contructeur
     function __construct($path_txt_file){
       $this->path_txt_file = $path_txt_file;
+      $this->test = file("" . $this->path_txt_file . "");
     }
 
     // fonction pour faire de notre jeu un tableau multidim
     public function parsingGame(){
-      $this->test = file("" . $this->path_txt_file . "");
-
       foreach ($this->test as $key => $value) {
-        //echo($tests . "<br>"); // value string
+        //echo($this->test[$key] . "<br>"); // value string
         $this->test[$key] = explode(" ", $value);
       }
 
@@ -31,27 +30,15 @@
         }
         echo("<br>");
       }
-
-      //var_dump($this->test);
-
-      //$myFileOpen = fopen("" . $this->path_txt_file . "", 'r+');
-
-      // while(($myFile = fgets($myFileOpen)) !== false){
-      //   //echo($myFile . "<br>");
-      //   $test[$count] = $myFile;
-      //   $count = $count + 1;
-      // }
-
-      //var_dump(file("" . $this->path_txt_file . ""));
-
     }
 
     public function foundStartEnd(){
+      $arrayGame = $this->test;
       $start = ["x" => 0, "y" => 0];
       $end = ["x" => 0, "y" => 0];
 
-      foreach ($this->test as $key => $value) {
-        foreach ($this->test[$key] as $keys => $values) {
+      foreach ($arrayGame as $key => $value) {
+        foreach ($arrayGame[$key] as $keys => $values) {
           if($values == "S"){
             $start["x"] = $keys;
             $start["y"] = $key;
@@ -64,6 +51,11 @@
       }
 
       return [$start, $end];
+    }
+
+    public function spawnPlayer($x, $y){
+      $this->test[$y][$x] = "M";
+      $this->showContent();
     }
   }
 ?>
