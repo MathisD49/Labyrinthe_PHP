@@ -57,5 +57,22 @@
       $this->test[$y][$x] = "M";
       $this->showContent();
     }
+
+    public function isWall($x, $y, $newX, $newY){
+      if($this->test[$y+$newY][$x+$newX] == "*"){
+        return True;
+      } else {
+        return False;
+      }
+    }
+
+    public function isEnd($x, $y, $newX, $newY){
+      $endCoords = $this->foundStartEnd();
+      if($x+$newX == $endCoords[1]["x"] && $y+$newY == $endCoords[1]["y"]){
+        return True;
+      } else {
+        return False;
+      }
+    }
   }
 ?>
