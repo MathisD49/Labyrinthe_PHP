@@ -9,12 +9,12 @@
     function __construct($path_txt_file){
       $this->path_txt_file = $path_txt_file;
       $this->test = file("" . $this->path_txt_file . "");
+      $this->parsingGame();
     }
 
     // fonction pour faire de notre jeu un tableau multidim
     public function parsingGame(){
       foreach ($this->test as $key => $value) {
-        //echo($this->test[$key] . "<br>"); // value string
         $this->test[$key] = explode(" ", $value);
       }
 
@@ -23,7 +23,7 @@
 
     //methode permetant d'ouvrir, de lire, et d'afficher le contenu de mon fichier texte
     public function showContent(){
-      $arrayGame = $this->parsingGame();
+      $arrayGame = $this->test;
       foreach ($arrayGame as $key => $value) {
         foreach ($arrayGame[$key] as $keys => $values) {
           echo($values . " ");
