@@ -9,9 +9,14 @@
     </div>
 
 <?php
+  if(!isset($_COOKIE["level"])){
+    setcookie("level", $_GET["level"], time() + 365*24*3600);
+    header("Refresh:0; url=game.php");
+  }
+
   // ceci permet de creer mon objet et de lancer ma méthode
   require_once('class/Labyrinthe.php');
-  $myLabyrinth = new Labyrinthe("labyrinthe.txt");
+  $myLabyrinth = new Labyrinthe($_COOKIE["level"]);
 
   if(isset($_COOKIE["joueur_x"]) && isset($_COOKIE["joueur_y"])){
     $myLabyrinth->spawnPlayer($_COOKIE["joueur_x"], $_COOKIE["joueur_y"]);
@@ -78,6 +83,16 @@
   if($_COOKIE["finish"] == 1){
     echo("<h2>Bravo vous avez gagné !</h2>");
   }
+
+  if(isset($_POST["quit"])){
+    setcookie("level", "", time() + 365*24*3600);
+    setcookie("joueur_x", "", time() + 365*24*3600);
+    setcookie("joueur_y", "", time() + 365*24*3600);
+    header("Refresh:0; url=level.php");
+  }
+
+  var_dump($_COOKIE);
+
 ?>
 
     <div>
@@ -90,6 +105,7 @@
 
       <form action="" method="POST">
         <input type="submit" value="Reload" name="reload">
+        <input type="submit" value="Quit" name="quit">
       </form>
 
       <form action="" method="POST">

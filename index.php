@@ -4,11 +4,11 @@
 
   if(isset($_POST["pseudo"])){
     setcookie("pseudo", $_POST["pseudo"], time() + 365*24*3600);
-    header("Refresh:0; url=game.php");
+    header("Refresh:0; url=level.php");
   }
 
   if(isset($_COOKIE["pseudo"])){
-    header("Refresh:5; url=game.php");
+    header("Refresh:0; url=Level.php");
   }
 
 
