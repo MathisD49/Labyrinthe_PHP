@@ -74,5 +74,48 @@
         return False;
       }
     }
+
+    public function ResetPlayerData($startEnd){
+      setcookie("joueur_x", $startEnd[0]["x"], time() + 365*24*3600);
+      setcookie("joueur_y", $startEnd[0]["y"], time() + 365*24*3600);
+      setcookie("finish", 0, time() + 365*24*3600);
+      header("Refresh:0; url=game.php");
+    }
+
+    public function Quit(){
+      setcookie("level", "", time() + 365*24*3600);
+      setcookie("joueur_x", "", time() + 365*24*3600);
+      setcookie("joueur_y", "", time() + 365*24*3600);
+      header("Refresh:0; url=level.php");
+    }
+
+    public function MoveVertical($cookie, $xAxe, $yAxe){
+      if($cookie >= 0 && $cookie <= 14 && !$this->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
+        setcookie("joueur_y", $cookie, time() + 365*24*3600);
+        if($this->isEnd($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
+          setcookie("finish", 1, time() + 365*24*3600);
+        }
+      }
+      header("Refresh:0; url=game.php");
+    }
+
+    public function MoveHorizontal($cookie, $xAxe, $yAxe){
+      if($cookie >= 0 && $cookie <= 14 && !$this->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
+        setcookie("joueur_x", $cookie, time() + 365*24*3600);
+        if($this->isEnd($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
+          setcookie("finish", 1, time() + 365*24*3600);
+        }
+      }
+      header("Refresh:0; url=game.php");
+    }
+
+
+
+
+
+
+
+
   }
+
 ?>

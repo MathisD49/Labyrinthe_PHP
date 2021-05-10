@@ -26,85 +26,54 @@
 
   // si la position du joueur n'est pas mise ou si il décide de reload, on met à la position du start
   if(!isset($_COOKIE["joueur_x"]) && !isset($_COOKIE["joueur_y"]) || isset($_POST["reload"])){
-    setcookie("joueur_x", $startEnd[0]["x"], time() + 365*24*3600);
-    setcookie("joueur_y", $startEnd[0]["y"], time() + 365*24*3600);
-    setcookie("finish", 0, time() + 365*24*3600);
-    header("Refresh:0; url=game.php");
+    $myLabyrinth->ResetPlayerData($startEnd);
   }
+
 
   if(isset($_GET["goRight"])){
-    if($_COOKIE["joueur_x"]+1 <= 14 && !$myLabyrinth->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], 1, 0)){
-      setcookie("joueur_x", $_COOKIE["joueur_x"]+1, time() + 365*24*3600);
-      if($myLabyrinth->isEnd($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], 1, 0)){
-        setcookie("finish", 1, time() + 365*24*3600);
-      }
-      header("Refresh:0; url=game.php");
-    }else {
-      header("Refresh:0; url=game.php");
-    }
+    $myLabyrinth->MoveHorizontal($_COOKIE["joueur_x"]+1, 1, 0);
   }
+
 
   if(isset($_GET["goLeft"])){
-    if($_COOKIE["joueur_x"]-1 >= 0 && !$myLabyrinth->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], -1, 0)){
-      setcookie("joueur_x", $_COOKIE["joueur_x"]-1, time() + 365*24*3600);
-      if($myLabyrinth->isEnd($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], -1, 0)){
-        setcookie("finish", 1, time() + 365*24*3600);
-      }
-      header("Refresh:0; url=game.php");
-    }else {
-      header("Refresh:0; url=game.php");
-    }
+    $myLabyrinth->MoveHorizontal($_COOKIE["joueur_x"]-1, -1, 0);
   }
+
 
   if(isset($_GET["goUp"])){
-    if($_COOKIE["joueur_y"]-1 >= 0 && !$myLabyrinth->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], 0, -1)){
-      setcookie("joueur_y", $_COOKIE["joueur_y"]-1, time() + 365*24*3600);
-      if($myLabyrinth->isEnd($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], 0, -1)){
-        setcookie("finish", 1, time() + 365*24*3600);
-      }
-      header("Refresh:0; url=game.php");
-    }else {
-      header("Refresh:0; url=game.php");
-    }
+    $myLabyrinth->MoveVertical($_COOKIE["joueur_y"]-1, 0, -1);
   }
+
 
   if(isset($_GET["goDown"])){
-    if($_COOKIE["joueur_y"]+1 <= 14 && !$myLabyrinth->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], 0, 1)){
-      setcookie("joueur_y", $_COOKIE["joueur_y"]+1, time() + 365*24*3600);
-      if($myLabyrinth->isEnd($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], 0, 1)){
-        setcookie("finish", 1, time() + 365*24*3600);
-      }
-      header("Refresh:0; url=game.php");
-    }else {
-      header("Refresh:0; url=game.php");
-    }
+    $myLabyrinth->MoveVertical($_COOKIE["joueur_y"]+1, 0, 1);
   }
+
 
   if($_COOKIE["finish"] == 1){
-    echo("<h2>Bravo vous avez gagné !</h2>");
+    echo("<h2>Bravo vous avez gagné !</h2><h3>Vous pouvez recommencer le niveau ou quitter pour en choisir un autre");
   }
+
 
   if(isset($_POST["quit"])){
-    setcookie("level", "", time() + 365*24*3600);
-    setcookie("joueur_x", "", time() + 365*24*3600);
-    setcookie("joueur_y", "", time() + 365*24*3600);
-    header("Refresh:0; url=level.php");
+    $myLabyrinth->Quit();
   }
-
-  var_dump($_COOKIE);
-
 ?>
 
     <div>
-      <form action="" method="GET">
-        <input type="submit" value="Right" name="goRight">
-        <input type="submit" value="Left" name="goLeft">
-        <input type="submit" value="Up" name="goUp">
-        <input type="submit" value="Down" name="goDown">
-      </form>
+      <?php if($_COOKIE["finish"] == 0): ?>
+        <form action="" method="GET">
+          <input type="submit" value="Right" name="goRight">
+          <input type="submit" value="Left" name="goLeft">
+          <input type="submit" value="Up" name="goUp">
+          <input type="submit" value="Down" name="goDown">
+        </form>
+      <?php endif; ?>
 
       <form action="" method="POST">
-        <input type="submit" value="Reload" name="reload">
+        <?php if($_COOKIE["finish"] == 1): ?>
+          <input type="submit" value="Reload" name="reload">
+        <?php endif; ?>
         <input type="submit" value="Quit" name="quit">
       </form>
 
