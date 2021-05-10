@@ -58,6 +58,11 @@
   if(isset($_POST["quit"])){
     $myLabyrinth->Quit();
   }
+
+  if(isset($_POST["nickname"])){
+    setcookie("pseudo", $_POST["nickname"], time() + 365*24*3600);
+    header("Refresh:0; url=game.php");
+  }
 ?>
 
     <div>
