@@ -29,24 +29,8 @@
     $myLabyrinth->ResetPlayerData($startEnd);
   }
 
-
-  if(isset($_GET["goRight"])){
-    $myLabyrinth->MoveHorizontal($_COOKIE["joueur_x"]+1, 1, 0);
-  }
-
-
-  if(isset($_GET["goLeft"])){
-    $myLabyrinth->MoveHorizontal($_COOKIE["joueur_x"]-1, -1, 0);
-  }
-
-
-  if(isset($_GET["goUp"])){
-    $myLabyrinth->MoveVertical($_COOKIE["joueur_y"]-1, 0, -1);
-  }
-
-
-  if(isset($_GET["goDown"])){
-    $myLabyrinth->MoveVertical($_COOKIE["joueur_y"]+1, 0, 1);
+  if(isset($_GET["movement"])){
+    $myLabyrinth->direction($_GET["movement"]);
   }
 
 
@@ -63,15 +47,20 @@
     setcookie("pseudo", $_POST["nickname"], time() + 365*24*3600);
     header("Refresh:0; url=game.php");
   }
+
+  // au lieu de mettre url=game.php dans le refresh, mettre l'url courant pour rester dynamique
+
+  // faire une base de donnée pour les coords des bonus et/ou des pièges
+
 ?>
 
     <div>
       <?php if($_COOKIE["finish"] == 0): ?>
         <form action="" method="GET">
-          <input type="submit" value="Right" name="goRight">
-          <input type="submit" value="Left" name="goLeft">
-          <input type="submit" value="Up" name="goUp">
-          <input type="submit" value="Down" name="goDown">
+          <input type="submit" value="Right" name="movement" id="button_right">
+          <input type="submit" value="Left" name="movement"  id="button_left">
+          <input type="submit" value="Up" name="movement"  id="button_up">
+          <input type="submit" value="Down" name="movement"  id="button_down">
         </form>
       <?php endif; ?>
 
