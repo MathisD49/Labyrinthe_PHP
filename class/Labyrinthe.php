@@ -21,7 +21,7 @@
       return $this->test;
     }
 
-    //methode permetant d'ouvrir, de lire, et d'afficher le contenu de mon fichier texte
+    // methode permetant d'ouvrir, de lire, et d'afficher le contenu de mon fichier texte
     public function showContent(){
       $arrayGame = $this->test;
       foreach ($arrayGame as $key => $value) {
@@ -32,6 +32,7 @@
       }
     }
 
+    // methode qui retourne un tableau contenant les coordonnées X et Y du point de départ et d'arrivé
     public function foundStartEnd(){
       $arrayGame = $this->test;
       $start = ["x" => 0, "y" => 0];
@@ -53,11 +54,13 @@
       return [$start, $end];
     }
 
+    // methode pour afficher le joueur à l'écran
     public function spawnPlayer($x, $y){
       $this->test[$y][$x] = "M";
       $this->showContent();
     }
 
+    // methode pour savoir si il y a un mur ou non
     public function isWall($x, $y, $newX, $newY){
       if($this->test[$y+$newY][$x+$newX] == "*"){
         return True;
@@ -66,6 +69,7 @@
       }
     }
 
+    // methode pour savoir si le joueur est au point d'arrivé
     public function isEnd($x, $y, $newX, $newY){
       $endCoords = $this->foundStartEnd();
       if($x+$newX == $endCoords[1]["x"] && $y+$newY == $endCoords[1]["y"]){
@@ -75,6 +79,7 @@
       }
     }
 
+    // methode utilisé pour recharger la partie
     public function ResetPlayerData($startEnd){
       setcookie("joueur_x", $startEnd[0]["x"], time() + 365*24*3600);
       setcookie("joueur_y", $startEnd[0]["y"], time() + 365*24*3600);
@@ -82,6 +87,7 @@
       header("Refresh:0; url=game.php");
     }
 
+    // methoe utiliser pour quitter la partie
     public function Quit(){
       setcookie("level", "", time() + 365*24*3600);
       setcookie("joueur_x", "", time() + 365*24*3600);
@@ -89,6 +95,7 @@
       header("Refresh:0; url=level.php");
     }
 
+    // methode pour déterminer vers quelle direction va le joueur
     public function direction($direction){
       if($direction == "Right"){
         $this->MoveHorizontal($_COOKIE["joueur_x"]+1, 1, 0);
@@ -103,6 +110,7 @@
       }
     }
 
+    // methode pour déplacer le joueur en bas ou en haut
     public function MoveVertical($cookie, $xAxe, $yAxe){
       if($cookie >= 0 && $cookie <= 14 && !$this->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
         setcookie("joueur_y", $cookie, time() + 365*24*3600);
@@ -113,6 +121,7 @@
       header("Refresh:0; url=game.php");
     }
 
+    // methode pour déplacer le joueur à gauche ou à droite
     public function MoveHorizontal($cookie, $xAxe, $yAxe){
       if($cookie >= 0 && $cookie <= 14 && !$this->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
         setcookie("joueur_x", $cookie, time() + 365*24*3600);
