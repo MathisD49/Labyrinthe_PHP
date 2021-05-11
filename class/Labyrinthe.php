@@ -4,12 +4,16 @@
     // attributs
     public $path_txt_file;
     public $test; // tableau avec les cases du jeu
+    public $myDB;
 
     // contructeur
     function __construct($path_txt_file){
       $this->path_txt_file = $path_txt_file;
       $this->test = file("" . $this->path_txt_file . "");
       $this->parsingGame();
+      require_once('Database.php');
+      $this->myDB = new Database();
+      $this->getCoordsBonus();
     }
 
     // fonction pour faire de notre jeu un tableau multidim
@@ -131,6 +135,52 @@
       }
       header("Refresh:0; url=game.php");
     }
+
+    public function getZero(){
+      $arrayZero = [];
+      $arrayGame = $this->test;
+
+      foreach ($arrayGame as $key => $value) {
+        foreach($arrayGame[$key] as $keys => $values){
+          if($values == "0"){
+            array_push($arrayZero, [$keys, $key]);
+          }
+        }
+      }
+      return $arrayZero;
+    }
+
+    // /!\ revoir le système de gestion des doublons !!!
+    public function getCoordsBonus(){
+      $arrayZero = $this->getZero();
+      $selectedNumber = [];
+      for($i=0; $i < 3; $i++) {
+        $number = rand(0,sizeof($arrayZero));
+        if($i > 0){
+          foreach ($selectedNumber as $value) {
+            if($number == $value){
+              $number = rand(0,sizeof($arrayZero));
+            }
+          }
+        }
+        $this->myDB->insertCoordsBonus($_COOKIE["PHPSESSID"], $arrayZero[$number][0], $arrayZero[$number][1]);
+        array_push($selectedNumber, $number);
+      }
+    }
+
+    public function showBonus(){
+      $coords = $this->myDB->getCoordsBonus($_COOKIE["PHPSESSID"]);
+      var_dump($coords);
+      foreach ($coords as $key => $value) {
+        foreach ($coords[$key] as $keys => $values) {
+          //$this->test[$key][$keys] = "T";
+
+        }
+      }
+    }
+
+
+
   }
 
 ?>

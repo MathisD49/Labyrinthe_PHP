@@ -23,6 +23,7 @@
   }
 
   $startEnd = $myLabyrinth->foundStartEnd();
+  $myLabyrinth->getCoordsBonus();
 
   // si la position du joueur n'est pas mise ou si il décide de reload, on met à la position du start
   if(!isset($_COOKIE["joueur_x"]) && !isset($_COOKIE["joueur_y"]) || isset($_POST["reload"])){
@@ -48,9 +49,27 @@
     header("Refresh:0; url=game.php");
   }
 
+  $myLabyrinth->getZero();
+  $myLabyrinth->showBonus();
+
   // au lieu de mettre url=game.php dans le refresh, mettre l'url courant pour rester dynamique
 
   // faire une base de donnée pour les coords des bonus et/ou des pièges
+  // creer une class bdd, faires des fonctions pour les différentes requêtes
+  // TODO:
+  // 1 - récupérer un tableau avec les coords des 0 (laby.php)
+  // 2 - générer 3 nombre aléatoire, et placer des bonus à la place des 0 (laby.php)
+  // 3 - mettre les bonus en base (data.php)
+  // 4 - récupérer les coords en base des bonus et les afficher à l'écran (laby.php)
+  // 5 - si le joueur prend un bonus, incrémenter score de 1 et remplacer par 0, et supprimer de la base
+
+  // TODO:
+  // mettre les données comme pseudo, uid, finish en bdd
+  // mettre position du joueur, bonus, piege en cookie
+
+  // réorganiser l'arborescence des fichiers
+
+  // mettre un tableau, (<td> etc etc), et en php mettre des class en fonction du caractère
 
 ?>
 
