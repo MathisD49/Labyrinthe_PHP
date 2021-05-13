@@ -62,12 +62,6 @@
 
   // faire une base de donnée pour les coords des bonus et/ou des pièges
   // creer une class bdd, faires des fonctions pour les différentes requêtes
-  // TODO:
-  // 1 - récupérer un tableau avec les coords des 0 (laby.php)
-  // 2 - générer 3 nombre aléatoire, et placer des bonus à la place des 0 (laby.php)
-  // 3 - mettre les bonus en base (data.php)
-  // 4 - récupérer les coords en base des bonus et les afficher à l'écran (laby.php)
-  // 5 - si le joueur prend un bonus, incrémenter score de 1 et remplacer par 0, et supprimer de la base
 
   // TODO:
   // mettre les données comme pseudo, uid, finish en bdd
