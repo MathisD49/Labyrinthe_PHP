@@ -11,7 +11,7 @@
 <?php
   if(!isset($_COOKIE["level"])){
     setcookie("level", $_GET["level"], time() + 365*24*3600); // METTRE EN BASE
-    header("Refresh:0; url=game.php");
+    header("Refresh:0");
   }
 
   // ceci permet de creer mon objet et de lancer ma méthode
@@ -47,18 +47,12 @@
   }
 
 
-  if(isset($_POST["quit"])){
-    $myLabyrinth->Quit();
-  }
-
   if(isset($_POST["nickname"])){
     setcookie("pseudo", $_POST["nickname"], time() + 365*24*3600); // METTRE EN BASE
     header("Refresh:0; url=game.php");
   }
 
   var_dump($_COOKIE);
-
-  unset($_COOKIE["bonus"]);
 
 
   // $myLabyrinth->getZero();

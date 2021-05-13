@@ -91,16 +91,7 @@
       setcookie("score", 0, time() + 365*24*3600);
       header("Refresh:0; url=game.php");
     }
-
-    // methoe utiliser pour quitter la partie
-    public function Quit(){
-      setcookie("level", "", time() + 365*24*3600); // MODIFIER EN BASE
-      setcookie("joueur_x", "", time() + 365*24*3600);
-      setcookie("joueur_y", "", time() + 365*24*3600);
-      // supprimer cookie bonus
-      header("Refresh:0; url=level.php");
-    }
-
+    
     // methode pour déterminer vers quelle direction va le joueur
     public function direction($direction){
       if($direction == "Right"){
