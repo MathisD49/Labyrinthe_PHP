@@ -13,7 +13,7 @@
       $this->parsingGame();
       require_once('Database.php');
       $this->myDB = new Database();
-      $this->getCoordsBonus();
+      // $this->getCoordsBonus();
     }
 
     // fonction pour faire de notre jeu un tableau multidim
@@ -87,15 +87,17 @@
     public function ResetPlayerData($startEnd){
       setcookie("joueur_x", $startEnd[0]["x"], time() + 365*24*3600);
       setcookie("joueur_y", $startEnd[0]["y"], time() + 365*24*3600);
-      setcookie("finish", 0, time() + 365*24*3600);
+      setcookie("finish", 0, time() + 365*24*3600); // METTRE EN BASE (UPDATE)
+      setcookie("score", 0, time() + 365*24*3600);
       header("Refresh:0; url=game.php");
     }
 
     // methoe utiliser pour quitter la partie
     public function Quit(){
-      setcookie("level", "", time() + 365*24*3600);
+      setcookie("level", "", time() + 365*24*3600); // MODIFIER EN BASE
       setcookie("joueur_x", "", time() + 365*24*3600);
       setcookie("joueur_y", "", time() + 365*24*3600);
+      // supprimer cookie bonus
       header("Refresh:0; url=level.php");
     }
 
@@ -119,7 +121,12 @@
       if($cookie >= 0 && $cookie <= 14 && !$this->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
         setcookie("joueur_y", $cookie, time() + 365*24*3600);
         if($this->isEnd($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
-          setcookie("finish", 1, time() + 365*24*3600);
+          setcookie("finish", 1, time() + 365*24*3600); // MODIFIER EN BASE
+        }
+        if($_COOKIE["score"] < 3){
+          if ($this->isBonus($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)) {
+            setcookie("score", $_COOKIE["score"]+1, time() + 365*24*3600);
+          }
         }
       }
       header("Refresh:0; url=game.php");
@@ -130,7 +137,12 @@
       if($cookie >= 0 && $cookie <= 14 && !$this->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
         setcookie("joueur_x", $cookie, time() + 365*24*3600);
         if($this->isEnd($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
-          setcookie("finish", 1, time() + 365*24*3600);
+          setcookie("finish", 1, time() + 365*24*3600); // MODIFIER EN BASE
+        }
+        if($_COOKIE["score"] < 3){
+          if ($this->isBonus($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)) {
+            setcookie("score", $_COOKIE["score"]+1, time() + 365*24*3600);
+          }
         }
       }
       header("Refresh:0; url=game.php");
@@ -150,34 +162,71 @@
       return $arrayZero;
     }
 
-    // /!\ revoir le système de gestion des doublons !!!
-    public function getCoordsBonus(){
+    public function setCordsBonus(){
+      echo("setCordsBonus");
       $arrayZero = $this->getZero();
       $selectedNumber = [];
-      for($i=0; $i < 3; $i++) {
+      for ($i=0; $i < 3 ; $i++) {
         $number = rand(0,sizeof($arrayZero));
         if($i > 0){
           foreach ($selectedNumber as $value) {
-            if($number == $value){
+            while ($number == $value) {
               $number = rand(0,sizeof($arrayZero));
             }
           }
         }
-        $this->myDB->insertCoordsBonus($_COOKIE["PHPSESSID"], $arrayZero[$number][0], $arrayZero[$number][1]);
+        setcookie("bonus[$i][x]", $arrayZero[$number][0], time() + 365*24*3600);
+        setcookie("bonus[$i][y]", $arrayZero[$number][1], time() + 365*24*3600);
         array_push($selectedNumber, $number);
+      }
+      header("Refresh:0; url=game.php");
+    }
+
+    public function spanwBonus($cookie){
+      foreach ($cookie as $key => $value) {
+        $this->test[$cookie[$key]['y']][$cookie[$key]['x']] = "T";
       }
     }
 
-    public function showBonus(){
-      $coords = $this->myDB->getCoordsBonus($_COOKIE["PHPSESSID"]);
-      var_dump($coords);
-      foreach ($coords as $key => $value) {
-        foreach ($coords[$key] as $keys => $values) {
-          //$this->test[$key][$keys] = "T";
-
+    public function isBonus($x, $y, $newX, $newY){
+      $test = 0;
+      foreach ($_COOKIE["bonus"] as $key => $value) {
+        if($x+$newX == $_COOKIE["bonus"][$key]['x'] && $y+$newY == $_COOKIE["bonus"][$key]['y']){
+          setcookie("bonus[$key][x]", '', time() - 365*24*3600, '/TP_PHP');
+          setcookie("bonus[$key][y]", '', time() - 365*24*3600, '/TP_PHP');
+          return True;
         }
       }
     }
+
+    // /!\ revoir le système de gestion des doublons !!!
+    // public function getCoordsBonus(){
+    //   $arrayZero = $this->getZero();
+    //   $selectedNumber = [];
+    //   for($i=0; $i < 3; $i++) {
+    //     $number = rand(0,sizeof($arrayZero));
+    //     if($i > 0){
+    //       foreach ($selectedNumber as $value) {
+    //         if($number == $value){ // while
+    //           $number = rand(0,sizeof($arrayZero));
+    //         }
+    //       }
+    //     }
+    //     $this->myDB->insertCoordsBonus($_COOKIE["PHPSESSID"], $arrayZero[$number][0], $arrayZero[$number][1]); // mettre dans la boucle
+    //     array_push($selectedNumber, $number);
+    //   }
+    // }
+
+    // public function showBonus(){
+    //   $coords = $this->myDB->getCoordsBonus($_COOKIE["PHPSESSID"]);
+    //   var_dump($coords);
+    //   foreach ($coords as $key => $value) {
+    //     foreach ($coords[$key] as $keys => $values) {
+    //       //$this->test[$key][$keys] = "T";
+    //
+    //     }
+    //   }
+    // }
 
 
 
