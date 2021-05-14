@@ -27,6 +27,18 @@
     //   return $coords;
     // }
 
+    public function deleteLigne($uid){
+      $sqli = $this->mysqli;
+      if(!$sqli->query("DELETE FROM information WHERE uid='$uid'")){
+        echo("erreur lors de la suppression");
+      }
+    }
+
+    // public setData($uid){
+    //   $sqli = $this->mysqli;
+    //   if(!$sqli->query("INSERT INTO information (level, uid, finish, score)"))
+    // }
+
 
   }
 ?>

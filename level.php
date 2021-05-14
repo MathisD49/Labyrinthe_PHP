@@ -1,5 +1,8 @@
 <!-- faire une requete bdd por supprimer colonne uid si existe -->
 <?php
+  require_once('class/database.php');
+  $myDB = new Database();
+  $myDB->deleteLigne($_COOKIE["PHPSESSID"]);
   setcookie("level", "", time() + 365*24*3600);
 ?>
 <html>
