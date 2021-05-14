@@ -2,8 +2,8 @@
 <?php
   require_once('class/database.php');
   $myDB = new Database();
-  $myDB->deleteLigne($_COOKIE["PHPSESSID"]);
-  setcookie("level", "", time() + 365*24*3600);
+  
+  //setcookie("level", "", time() + 365*24*3600);
 ?>
 <html>
   <head>

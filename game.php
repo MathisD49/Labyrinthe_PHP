@@ -9,23 +9,29 @@
     </div>
 
 <?php
-  if(!isset($_COOKIE["level"])){
+  require_once('class/database.php');
+  $myDB = new Database();
+
+  if(isset($_GET["level"])){
     // insérer ici bdd
-    setcookie("level", $_GET["level"], time() + 365*24*3600); // METTRE EN BASE
-    setcookie("score", 0, time() + 365*24*3600);
+    // setcookie("level", $_GET["level"], time() + 365*24*3600); // METTRE EN BASE
+    // setcookie("score", 0, time() + 365*24*3600); // mettre en base
     setcookie("joueur_x", "", time() + 365*24*3600);
     setcookie("joueur_y", "", time() + 365*24*3600);
-    setcookie("finish", 0, time() + 365*24*3600);
-    header("Refresh:0");
+    $myDB->setData($_GET["level"], $_COOKIE["PHPSESSID"]);
+    // setcookie("finish", 0, time() + 365*24*3600); // mettre en base
+    header("Refresh:0; url=game.php");
   }
 
   // ceci permet de creer mon objet et de lancer ma méthode
   require_once('class/Labyrinthe.php');
-  $myLabyrinth = new Labyrinthe($_COOKIE["level"]);
+  // METTRE FONCTION GET
+  $myLabyrinth = new Labyrinthe("" . $myDB->getLevel($_COOKIE["PHPSESSID"])["level"] . "");
 
-  if(!isset($_COOKIE["bonus"]) && $_COOKIE["score"] == 0){
+  // METTRE FONCTION GET
+  if(!isset($_COOKIE["bonus"]) && $myDB->getScore($_COOKIE["PHPSESSID"]) == 0){
     $myLabyrinth->setCordsBonus();
-  } elseif($_COOKIE["score"] < 3){
+  } elseif($myDB->getScore($_COOKIE["PHPSESSID"]) < 3){
     $myLabyrinth->spanwBonus($_COOKIE["bonus"]);
   }
 
@@ -38,9 +44,11 @@
   // si la position du joueur n'est pas mise ou si il décide de reload, on met à la position du start
   if(!isset($_COOKIE["joueur_x"]) && !isset($_COOKIE["joueur_y"]) || isset($_POST["reload"])){
     $myLabyrinth->ResetPlayerData($startEnd);
+    // METTRE UNE FONCTION DE SET
   }
 
   if(isset($_POST["quit"])){
+    $myDB->deleteLigne($_COOKIE["PHPSESSID"]);
     header("Refresh:0; url=level.php");
   }
 
@@ -49,10 +57,10 @@
     $myLabyrinth->direction($_GET["movement"]);
   }
 
-
-  if($_COOKIE["finish"] == 1 && $_COOKIE["score"] >= 3){
+  // METTRE FONCTION GET
+  if($myDB->getFinish($_COOKIE["PHPSESSID"]) == 1 && $myDB->getScore($_COOKIE["PHPSESSID"]) >= 3){
     echo("<h2>Bravo vous avez gagné !</h2><h3>Vous pouvez recommencer le niveau ou quitter pour en choisir un autre");
-  } elseif ($_COOKIE["finish"] == 1 && $_COOKIE["score"] < 3) {
+  } elseif ($myDB->getFinish($_COOKIE["PHPSESSID"]) == 1 && $myDB->getScore($_COOKIE["PHPSESSID"]) < 3) {
     echo("<h2>Vous avez terminez le labyrinthe mais vous n'avez pas récupéré tous les bonus, vous avez perdu !</h2><h3>Vous pouvez recommencer le niveau ou quitter pour en choisir un autre");
   }
 
@@ -63,6 +71,11 @@
   }
 
   var_dump($_COOKIE);
+
+  var_dump($myDB->getFinish($_COOKIE["PHPSESSID"]));
+  var_dump($myDB->getScore($_COOKIE["PHPSESSID"]));
+
+
 
 
   // $myLabyrinth->getZero();
@@ -96,7 +109,7 @@
 ?>
 
     <div>
-      <?php if($_COOKIE["finish"] == 0): ?>
+      <?php if($myDB->getFinish($_COOKIE["PHPSESSID"]) == 0): ?>
         <form action="" method="GET">
           <input type="submit" value="Right" name="movement" id="button_right">
           <input type="submit" value="Left" name="movement"  id="button_left">
@@ -106,7 +119,7 @@
       <?php endif; ?>
 
       <form action="" method="POST">
-        <?php if($_COOKIE["finish"] == 1): ?>
+        <?php if($myDB->getFinish($_COOKIE["PHPSESSID"]) == 1): ?>
           <input type="submit" value="Reload" name="reload">
           <input type="submit" value="Quit" name="quit">
         <?php endif; ?>

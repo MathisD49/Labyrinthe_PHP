@@ -87,8 +87,10 @@
     public function ResetPlayerData($startEnd){
       setcookie("joueur_x", $startEnd[0]["x"], time() + 365*24*3600);
       setcookie("joueur_y", $startEnd[0]["y"], time() + 365*24*3600);
-      setcookie("finish", 0, time() + 365*24*3600); // METTRE EN BASE (UPDATE)
-      setcookie("score", 0, time() + 365*24*3600);
+      // setcookie("finish", 0, time() + 365*24*3600); // METTRE EN BASE (UPDATE)
+      // setcookie("score", 0, time() + 365*24*3600); // mettre en base
+      $this->myDB->setFinish($_COOKIE["PHPSESSID"], 0);
+      $this->myDB->setScoreZero($_COOKIE["PHPSESSID"]);
       header("Refresh:0; url=game.php");
     }
 
@@ -112,11 +114,13 @@
       if($cookie >= 0 && $cookie <= 14 && !$this->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
         setcookie("joueur_y", $cookie, time() + 365*24*3600);
         if($this->isEnd($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
-          setcookie("finish", 1, time() + 365*24*3600); // MODIFIER EN BASE
+          // setcookie("finish", 1, time() + 365*24*3600); // MODIFIER EN BASE
+          $this->myDB->setFinish($_COOKIE["PHPSESSID"], 1);
         }
-        if($_COOKIE["score"] < 3){
+        if($this->myDB->getScore($_COOKIE["PHPSESSID"]) < 3){
           if ($this->isBonus($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)) {
-            setcookie("score", $_COOKIE["score"]+1, time() + 365*24*3600);
+            // setcookie("score", $_COOKIE["score"]+1, time() + 365*24*3600); // METTRE EN BASE
+            $this->myDB->setScore($_COOKIE["PHPSESSID"]);
           }
         }
       }
@@ -128,11 +132,13 @@
       if($cookie >= 0 && $cookie <= 14 && !$this->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
         setcookie("joueur_x", $cookie, time() + 365*24*3600);
         if($this->isEnd($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
-          setcookie("finish", 1, time() + 365*24*3600); // MODIFIER EN BASE
+          // setcookie("finish", 1, time() + 365*24*3600); // MODIFIER EN BASE
+          $this->myDB->setFinish($_COOKIE["PHPSESSID"], 1);
         }
-        if($_COOKIE["score"] < 3){
+        if($this->myDB->getScore($_COOKIE["PHPSESSID"]) < 3){
           if ($this->isBonus($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)) {
-            setcookie("score", $_COOKIE["score"]+1, time() + 365*24*3600);
+            // setcookie("score", $_COOKIE["score"]+1, time() + 365*24*3600); // METTRE EN BASE
+            $this->myDB->setScore($_COOKIE["PHPSESSID"]);
           }
         }
       }
@@ -154,7 +160,6 @@
     }
 
     public function setCordsBonus(){
-      echo("setCordsBonus");
       $arrayZero = $this->getZero();
       $selectedNumber = [];
       for ($i=0; $i < 3 ; $i++) {
