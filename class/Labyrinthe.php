@@ -13,7 +13,6 @@
       $this->parsingGame();
       require_once('Database.php');
       $this->myDB = new Database();
-      // $this->getCoordsBonus();
     }
 
     // fonction pour faire de notre jeu un tableau multidim
@@ -21,19 +20,7 @@
       foreach ($this->test as $key => $value) {
         $this->test[$key] = explode(" ", $value);
       }
-
       return $this->test;
-    }
-
-    // methode permetant d'ouvrir, de lire, et d'afficher le contenu de mon fichier texte
-    public function showContent(){
-      $arrayGame = $this->test;
-      foreach ($arrayGame as $key => $value) {
-        foreach ($arrayGame[$key] as $keys => $values) {
-          echo($values . " ");
-        }
-        echo("<br>");
-      }
     }
 
     // methode qui retourne un tableau contenant les coordonnées X et Y du point de départ et d'arrivé
@@ -87,8 +74,6 @@
     public function ResetPlayerData($startEnd){
       setcookie("joueur_x", $startEnd[0]["x"], time() + 365*24*3600);
       setcookie("joueur_y", $startEnd[0]["y"], time() + 365*24*3600);
-      // setcookie("finish", 0, time() + 365*24*3600); // METTRE EN BASE (UPDATE)
-      // setcookie("score", 0, time() + 365*24*3600); // mettre en base
       $this->myDB->setFinish($_COOKIE["PHPSESSID"], 0);
       $this->myDB->setScoreZero($_COOKIE["PHPSESSID"]);
       header("Refresh:0; url=game.php");
@@ -114,12 +99,10 @@
       if($cookie >= 0 && $cookie <= 14 && !$this->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
         setcookie("joueur_y", $cookie, time() + 365*24*3600);
         if($this->isEnd($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
-          // setcookie("finish", 1, time() + 365*24*3600); // MODIFIER EN BASE
           $this->myDB->setFinish($_COOKIE["PHPSESSID"], 1);
         }
         if($this->myDB->getScore($_COOKIE["PHPSESSID"]) < 3){
           if ($this->isBonus($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)) {
-            // setcookie("score", $_COOKIE["score"]+1, time() + 365*24*3600); // METTRE EN BASE
             $this->myDB->setScore($_COOKIE["PHPSESSID"]);
           }
         }
@@ -132,12 +115,10 @@
       if($cookie >= 0 && $cookie <= 14 && !$this->isWall($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
         setcookie("joueur_x", $cookie, time() + 365*24*3600);
         if($this->isEnd($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)){
-          // setcookie("finish", 1, time() + 365*24*3600); // MODIFIER EN BASE
           $this->myDB->setFinish($_COOKIE["PHPSESSID"], 1);
         }
         if($this->myDB->getScore($_COOKIE["PHPSESSID"]) < 3){
           if ($this->isBonus($_COOKIE["joueur_x"], $_COOKIE["joueur_y"], $xAxe, $yAxe)) {
-            // setcookie("score", $_COOKIE["score"]+1, time() + 365*24*3600); // METTRE EN BASE
             $this->myDB->setScore($_COOKIE["PHPSESSID"]);
           }
         }
@@ -195,37 +176,31 @@
       }
     }
 
-    // /!\ revoir le système de gestion des doublons !!!
-    // public function getCoordsBonus(){
-    //   $arrayZero = $this->getZero();
-    //   $selectedNumber = [];
-    //   for($i=0; $i < 3; $i++) {
-    //     $number = rand(0,sizeof($arrayZero));
-    //     if($i > 0){
-    //       foreach ($selectedNumber as $value) {
-    //         if($number == $value){ // while
-    //           $number = rand(0,sizeof($arrayZero));
-    //         }
-    //       }
-    //     }
-    //     $this->myDB->insertCoordsBonus($_COOKIE["PHPSESSID"], $arrayZero[$number][0], $arrayZero[$number][1]); // mettre dans la boucle
-    //     array_push($selectedNumber, $number);
-    //   }
-    // }
-
-    // public function showBonus(){
-    //   $coords = $this->myDB->getCoordsBonus($_COOKIE["PHPSESSID"]);
-    //   var_dump($coords);
-    //   foreach ($coords as $key => $value) {
-    //     foreach ($coords[$key] as $keys => $values) {
-    //       //$this->test[$key][$keys] = "T";
-    //
-    //     }
-    //   }
-    // }
-
-
-
+    // methode permetant d'ouvrir, de lire, et d'afficher le contenu de mon fichier texte
+    public function showContent(){
+      $arrayGame = $this->test;
+      echo("<table>");
+      foreach ($arrayGame as $key => $value) {
+        echo("<tr>");
+        foreach ($arrayGame[$key] as $keys => $values) {
+          if($values == "M"){
+            echo("<th style='background-color: blue; width: 20px; height: 20px'></th>");
+          }elseif ($values == "*") {
+            echo("<th style='background-color: black; width: 20px; height: 20px'></th>");
+          }elseif ($values == "0") {
+            echo("<th style='background-color: white; width: 20px; height: 20px'></th>");
+          }elseif ($values == "S") {
+            echo("<th style='background-color: green; width: 20px; height: 20px'></th>");
+          }elseif ($values == "E") {
+            echo("<th style='background-color: red; width: 20px; height: 20px'></th>");
+          }elseif ($values == "T") {
+            echo("<th style='background-color: yellow; width: 20px; height: 20px'></th>");
+          }
+        }
+        echo("</tr>");
+      }
+      echo("</table>");
+    }
   }
 
 ?>
