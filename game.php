@@ -10,7 +10,12 @@
 
 <?php
   if(!isset($_COOKIE["level"])){
+    // insérer ici bdd
     setcookie("level", $_GET["level"], time() + 365*24*3600); // METTRE EN BASE
+    setcookie("score", 0, time() + 365*24*3600);
+    setcookie("joueur_x", "", time() + 365*24*3600);
+    setcookie("joueur_y", "", time() + 365*24*3600);
+    setcookie("finish", 0, time() + 365*24*3600);
     header("Refresh:0");
   }
 
@@ -34,6 +39,11 @@
   if(!isset($_COOKIE["joueur_x"]) && !isset($_COOKIE["joueur_y"]) || isset($_POST["reload"])){
     $myLabyrinth->ResetPlayerData($startEnd);
   }
+
+  if(isset($_POST["quit"])){
+    header("Refresh:0; url=level.php");
+  }
+
 
   if(isset($_GET["movement"])){
     $myLabyrinth->direction($_GET["movement"]);
@@ -64,7 +74,7 @@
   // creer une class bdd, faires des fonctions pour les différentes requêtes
 
   // TODO:
-  // mettre les données comme pseudo, uid, finish en bdd
+  // mettre les données comme level, uid, finish, score en bdd
   // mettre position du joueur, bonus, piege en cookie
 
   // réorganiser l'arborescence des fichiers
@@ -98,8 +108,8 @@
       <form action="" method="POST">
         <?php if($_COOKIE["finish"] == 1): ?>
           <input type="submit" value="Reload" name="reload">
+          <input type="submit" value="Quit" name="quit">
         <?php endif; ?>
-        <input type="submit" value="Quit" name="quit">
       </form>
 
       <form action="" method="POST">

@@ -91,7 +91,7 @@
       setcookie("score", 0, time() + 365*24*3600);
       header("Refresh:0; url=game.php");
     }
-    
+
     // methode pour déterminer vers quelle direction va le joueur
     public function direction($direction){
       if($direction == "Right"){

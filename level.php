@@ -1,3 +1,7 @@
+<!-- faire une requete bdd por supprimer colonne uid si existe -->
+<?php
+  setcookie("level", "", time() + 365*24*3600);
+?>
 <html>
   <head>
     <title>Level</title>
