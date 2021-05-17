@@ -8,25 +8,6 @@
       $this->mysqli = new mysqli("localhost", "root", "", "labyrinthe_php");
     }
 
-    // public function insertCoordsBonus($uid, $x, $y){
-    //   $sqli = $this->mysqli;
-    //   if(!$sqli->query("INSERT INTO bonus (uid, x, y) VALUES ('$uid', $x, $y)")){
-    //     echo("Erreur lors de l'insertion en bdd");
-    //   }
-    // }
-
-    // public function getCoordsBonus($uid){
-    //   $sqli = $this->mysqli;
-    //   $coords = [];
-    //   if($result = $sqli->query("SELECT * FROM bonus WHERE uid='$uid'")){
-    //     while($row = $result->fetch_assoc()){
-    //       $coords[] = [$row['x'], $row['y']];
-    //     }
-    //     $result->close();
-    //   }
-    //   return $coords;
-    // }
-
     public function deleteLigne($uid){
       $sqli = $this->mysqli;
       if(!$sqli->query("DELETE FROM information WHERE uid='$uid'")){
@@ -96,10 +77,15 @@
       }
     }
 
-
-
-    //faire les fonction pour get tous les éléments de la base et set
-
-
+    public function verifUid($uid){
+      $sqli = $this->mysqli;
+      if($result = $sqli->query("SELECT * FROM information WHERE uid='$uid'")){
+        if($result->num_rows > 0){
+          return True;
+        } else {
+          return False;
+        }
+      }
+    }
   }
 ?>

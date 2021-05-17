@@ -18,9 +18,11 @@
   $myDB = new Database();
 
   if(isset($_GET["level"])){
-    setcookie("joueur_x", "", time() + 365*24*3600);
-    setcookie("joueur_y", "", time() + 365*24*3600);
-    $myDB->setData($_GET["level"], $_COOKIE["PHPSESSID"]);
+    if(!$myDB->verifUid($_COOKIE["PHPSESSID"])){
+      setcookie("joueur_x", "", time() + 365*24*3600);
+      setcookie("joueur_y", "", time() + 365*24*3600);
+      $myDB->setData($_GET["level"], $_COOKIE["PHPSESSID"]);
+    }
     header("Refresh:0; url=game.php");
   }
 

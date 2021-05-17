@@ -2,8 +2,7 @@
 <?php
   require_once('class/database.php');
   $myDB = new Database();
-  
-  //setcookie("level", "", time() + 365*24*3600);
+
 ?>
 <html>
   <head>

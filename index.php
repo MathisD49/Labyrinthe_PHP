@@ -1,7 +1,4 @@
 <?php
-  var_dump($_COOKIE);
-  var_dump($_POST);
-
   if(isset($_POST["pseudo"])){
     setcookie("pseudo", $_POST["pseudo"], time() + 365*24*3600);
     header("Refresh:0; url=level.php");
