@@ -49,7 +49,7 @@
 
   // si le boutton quitter est cliqué
   if(isset($_POST["quit"])){
-    $myDB->deleteLigne($_COOKIE["PHPSESSID"]); // on supprime la ligne en base
+    $myDB->deleteLine($_COOKIE["PHPSESSID"]); // on supprime la ligne en base
     header("Refresh:0; url=level.php");
   }
 
@@ -90,7 +90,7 @@
       <form action="" method="POST">
         <input type="submit" value="Recommencer" name="reload">
         <?php if($myDB->getFinish($_COOKIE["PHPSESSID"]) == 1): ?> <!-- si je jeu est terminé on affiche ces bouttons -->
-          <input type="submit" value="Quit" name="quit">
+          <input type="submit" value="Quitter" name="quit">
         <?php endif; ?>
       </form>
 

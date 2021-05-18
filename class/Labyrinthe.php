@@ -3,13 +3,13 @@
 
     // attributs
     public $path_txt_file;
-    public $test; // tableau avec les cases du jeu
+    public $listGame; // tableau avec les cases du jeu
     public $myDB;
 
     // contructeur
     function __construct($path_txt_file){
       $this->path_txt_file = $path_txt_file;
-      $this->test = file("" . $this->path_txt_file . "");
+      $this->listGame = file("" . $this->path_txt_file . "");
       $this->parsingGame();
       require_once('Database.php');
       $this->myDB = new Database();
@@ -17,15 +17,15 @@
 
     // fonction pour faire de notre jeu un tableau multidim
     public function parsingGame(){
-      foreach ($this->test as $key => $value) {
-        $this->test[$key] = explode(" ", $value);
+      foreach ($this->listGame as $key => $value) {
+        $this->listGame[$key] = explode(" ", $value);
       }
-      return $this->test;
+      return $this->listGame;
     }
 
     // methode qui retourne un tableau contenant les coordonnées X et Y du point de départ et d'arrivé
     public function foundStartEnd(){
-      $arrayGame = $this->test;
+      $arrayGame = $this->listGame;
       $start = ["x" => 0, "y" => 0];
       $end = ["x" => 0, "y" => 0];
 
@@ -47,13 +47,13 @@
 
     // methode pour afficher le joueur à l'écran
     public function spawnPlayer($x, $y){
-      $this->test[$y][$x] = "M";
+      $this->listGame[$y][$x] = "M";
       $this->showContent();
     }
 
     // methode pour savoir si il y a un mur ou non
     public function isWall($x, $y, $newX, $newY){
-      if($this->test[$y+$newY][$x+$newX] == "*"){
+      if($this->listGame[$y+$newY][$x+$newX] == "*"){
         return True;
       } else {
         return False;
@@ -130,7 +130,7 @@
     // permet de récupérer tous les 0 du jeu
     public function getZero(){
       $arrayZero = [];
-      $arrayGame = $this->test;
+      $arrayGame = $this->listGame;
 
       foreach ($arrayGame as $key => $value) {
         foreach($arrayGame[$key] as $keys => $values){
@@ -165,13 +165,13 @@
     // permet d'ajouter les bonus au jeu
     public function spanwBonus($cookie){
       foreach ($cookie as $key => $value) {
-        $this->test[$cookie[$key]['y']][$cookie[$key]['x']] = "T";
+        $this->listGame[$cookie[$key]['y']][$cookie[$key]['x']] = "T";
       }
     }
 
     // vérifie si le joueur arrive sur un bonus
     public function isBonus($x, $y, $newX, $newY){
-      $test = 0;
+      // $test = 0;
       foreach ($_COOKIE["bonus"] as $key => $value) {
         if($x+$newX == $_COOKIE["bonus"][$key]['x'] && $y+$newY == $_COOKIE["bonus"][$key]['y']){
           setcookie("bonus[$key][x]", '', time() - 365*24*3600, '/TP_PHP');
@@ -183,7 +183,7 @@
 
     // methode permetant d'ouvrir, de lire, et d'afficher le contenu de mon fichier texte
     public function showContent(){
-      $arrayGame = $this->test;
+      $arrayGame = $this->listGame;
       echo("<table>");
       foreach ($arrayGame as $key => $value) {
         echo("<tr>");

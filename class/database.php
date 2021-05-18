@@ -9,7 +9,7 @@
     }
 
     // permet de supprimer la ligne où se trouve l'uid de l'utilisateur
-    public function deleteLigne($uid){
+    public function deleteLine($uid){
       $sqli = $this->mysqli;
       if(!$sqli->query("DELETE FROM information WHERE uid='$uid'")){
         echo("erreur lors de la suppression");
