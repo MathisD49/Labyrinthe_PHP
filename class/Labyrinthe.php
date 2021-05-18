@@ -171,7 +171,6 @@
 
     // vérifie si le joueur arrive sur un bonus
     public function isBonus($x, $y, $newX, $newY){
-      // $test = 0;
       foreach ($_COOKIE["bonus"] as $key => $value) {
         if($x+$newX == $_COOKIE["bonus"][$key]['x'] && $y+$newY == $_COOKIE["bonus"][$key]['y']){
           setcookie("bonus[$key][x]", '', time() - 365*24*3600, '/TP_PHP');
