@@ -8,6 +8,7 @@
       $this->mysqli = new mysqli("localhost", "root", "", "labyrinthe_php");
     }
 
+    // permet de supprimer la ligne où se trouve l'uid de l'utilisateur
     public function deleteLigne($uid){
       $sqli = $this->mysqli;
       if(!$sqli->query("DELETE FROM information WHERE uid='$uid'")){
@@ -15,6 +16,7 @@
       }
     }
 
+    // permet de creer une ligne avec les infos de l'utilisateur et du jeu
     public function setData($level, $uid){
       $sqli = $this->mysqli;
       if(!$sqli->query("INSERT INTO information (level, uid, finish, score) VALUES ('$level', '$uid', 0, 0)")){
@@ -22,6 +24,7 @@
       }
     }
 
+    // permet de récupérer le level où se trouve l'utilisateur
     public function getLevel($uid){
       $sqli = $this->mysqli;
       $gameLevel = "";
@@ -33,6 +36,7 @@
       return $gameLevel;
     }
 
+    // permet de récupérer la valeur finish en base de l'utilisateur
     public function getFinish($uid){
       $sqli = $this->mysqli;
       $gameFinish = 0;
@@ -44,6 +48,7 @@
       return (int)$gameFinish;
     }
 
+    // permet de récupérer la valeur score en base de l'utilisateur
     public function getScore($uid){
       $sqli = $this->mysqli;
       $gameScore = 0;
@@ -55,6 +60,7 @@
       return (int)$gameScore;
     }
 
+    // permet de définir dans la base la valeur finish de l'utilisateur
     public function setFinish($uid, $state){
       $sqli = $this->mysqli;
       if(!$sqli->query("UPDATE information SET finish=$state WHERE uid='$uid'")){
@@ -62,6 +68,7 @@
       }
     }
 
+    // permet de définir dans la base la valeur score de l'utilisateur à 0
     public function setScoreZero($uid){
       $sqli = $this->mysqli;
       if(!$sqli->query("UPDATE information SET score=0 WHERE uid='$uid'")){
@@ -69,6 +76,7 @@
       }
     }
 
+    // permet de définir dans la base la valeur score de l'utilisateur
     public function setScore($uid){
       $sqli = $this->mysqli;
       $currentScore = $this->getScore($uid);
@@ -77,6 +85,7 @@
       }
     }
 
+    // permet de vériier si il existe déjà une ligne pour l'utilisateur ou non
     public function verifUid($uid){
       $sqli = $this->mysqli;
       if($result = $sqli->query("SELECT * FROM information WHERE uid='$uid'")){

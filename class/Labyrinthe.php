@@ -74,6 +74,7 @@
     public function ResetPlayerData($startEnd){
       setcookie("joueur_x", $startEnd[0]["x"], time() + 365*24*3600);
       setcookie("joueur_y", $startEnd[0]["y"], time() + 365*24*3600);
+      setcookie("bonus", "", time() + 365*24*3600);
       $this->myDB->setFinish($_COOKIE["PHPSESSID"], 0);
       $this->myDB->setScoreZero($_COOKIE["PHPSESSID"]);
       header("Refresh:0; url=game.php");
@@ -81,13 +82,13 @@
 
     // methode pour déterminer vers quelle direction va le joueur
     public function direction($direction){
-      if($direction == "Right"){
+      if($direction == "Droite"){
         $this->MoveHorizontal($_COOKIE["joueur_x"]+1, 1, 0);
-      } elseif ($direction == "Left") {
+      } elseif ($direction == "Gauche") {
         $this->MoveHorizontal($_COOKIE["joueur_x"]-1, -1, 0);
-      } elseif ($direction == "Up") {
+      } elseif ($direction == "Haut") {
         $this->MoveVertical($_COOKIE["joueur_y"]-1, 0, -1);
-      } elseif ($direction == "Down") {
+      } elseif ($direction == "Bas") {
         $this->MoveVertical($_COOKIE["joueur_y"]+1, 0, 1);
       } else {
         header("Refresh:0; url=game.php");
@@ -126,6 +127,7 @@
       header("Refresh:0; url=game.php");
     }
 
+    // permet de récupérer tous les 0 du jeu
     public function getZero(){
       $arrayZero = [];
       $arrayGame = $this->test;
@@ -140,6 +142,7 @@
       return $arrayZero;
     }
 
+    // va générer aléatoirement 3 nomber pour placer des bonus sur les 0 correspondant
     public function setCordsBonus(){
       $arrayZero = $this->getZero();
       $selectedNumber = [];
@@ -159,12 +162,14 @@
       header("Refresh:0; url=game.php");
     }
 
+    // permet d'ajouter les bonus au jeu
     public function spanwBonus($cookie){
       foreach ($cookie as $key => $value) {
         $this->test[$cookie[$key]['y']][$cookie[$key]['x']] = "T";
       }
     }
 
+    // vérifie si le joueur arrive sur un bonus
     public function isBonus($x, $y, $newX, $newY){
       $test = 0;
       foreach ($_COOKIE["bonus"] as $key => $value) {

@@ -1,9 +1,3 @@
-<!-- faire une requete bdd por supprimer colonne uid si existe -->
-<?php
-  require_once('class/database.php');
-  $myDB = new Database();
-
-?>
 <html>
   <head>
     <title>Level</title>
