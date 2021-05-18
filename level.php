@@ -1,3 +1,11 @@
+<?php
+  if(!isset($_COOKIE["PHPSESSID"])){
+    session_start();
+    session_regenerate_id();
+    session_destroy();
+  }
+?>
+
 <html>
   <head>
     <title>Level</title>
