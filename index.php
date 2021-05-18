@@ -10,6 +10,11 @@
     header("Refresh:0; url=Level.php");
   }
 
+  if(!isset($_COOKIE["PHPSESSID"])){
+    session_start();
+    session_regenerate_id();
+    session_destroy();
+  }
 
 ?>
 
